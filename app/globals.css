@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-image: radial-gradient(circle at 50% -10%, rgba(255, 46, 166, 0.08), transparent 45%),
+    radial-gradient(circle at 100% 0%, rgba(255, 46, 166, 0.04), transparent 35%);
+  background-attachment: fixed;
+}
+
+/* subtle film grain */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* comic halftone dot texture — subtle, poppy, doesn't fight the dark bg */
+.halftone::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image: radial-gradient(circle, #ff2ea6 1px, transparent 1.4px);
+  background-size: 28px 28px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #242430;
+  border-radius: 999px;
+  border: 2px solid #08080a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #33333f;
+}
+
+:focus-visible {
+  outline: 2px solid #ff2ea6;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.text-gradient-neon {
+  background: linear-gradient(90deg, #ff2ea6, #ff8fd1 60%, #ff2ea6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Comic-book outlined text — used sparingly for the wordmark, section
+   titles, and the top-3 rank numbers. Faked with layered text-shadows
+   instead of -webkit-text-stroke, which renders inconsistently. */
+.comic-text {
+  font-family: var(--font-comic);
+  letter-spacing: 0.02em;
+  text-shadow:
+    -1.5px -1.5px 0 #000,
+    1.5px -1.5px 0 #000,
+    -1.5px 1.5px 0 #000,
+    1.5px 1.5px 0 #000;
+}
+
+/* Hard offset "comic panel" shadow — a graphic-novel pop instead of a soft blur */
+.comic-shadow {
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.85);
+}
+
+/* ---------------------------------------------------------------
+   Rank 1/2/3 card borders — comic sticker style: a crisp black ink
+   outline (like a comic panel/sticker edge), a solid colored halo
+   ring sitting just outside it with zero blur (the "sticker" pop),
+   and a soft blurred glow further out that's what actually breathes.
+   #1 additionally gets a continuous gold/white gradient flowing
+   around the full ring on top of this — deliberately no transparent
+   gaps in that gradient, so it reads as color flowing around the
+   loop rather than a beam sweeping through darkness.
+   --------------------------------------------------------------- */
+@keyframes breathe-gold {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px #f4c95d, 0 0 20px 4px rgba(244, 201, 93, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 4px #fff3cf, 0 0 38px 10px rgba(244, 201, 93, 0.95);
+  }
+}
+
+@keyframes breathe-silver {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px #cfd6e0, 0 0 18px 4px rgba(207, 214, 224, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 4px #ffffff, 0 0 34px 9px rgba(207, 214, 224, 0.9);
+  }
+}
+
+@keyframes breathe-bronze {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px #d98a5a, 0 0 18px 4px rgba(217, 138, 90, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 4px #ffd3ad, 0 0 34px 9px rgba(217, 138, 90, 0.9);
+  }
+}
+
+@keyframes ring-flow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.comet-ring {
+  position: relative;
+  border-radius: 16px;
+}
+
+.comet-ring--gold {
+  border: 3px solid #000;
+  animation: breathe-gold 2s ease-in-out infinite;
+}
+
+.comet-ring--silver {
+  border: 3px solid #000;
+  animation: breathe-silver 2.2s ease-in-out infinite;
+}
+
+.comet-ring--bronze {
+  border: 3px solid #000;
+  animation: breathe-bronze 2.4s ease-in-out infinite;
+}
+
+/* Hard clip for the #1 flowing gradient — no matter what causes a
+   pseudo-element to render outside its intended box (a transform/
+   containing-block quirk during the entrance-pop animation, in this
+   case), overflow:hidden here makes it structurally impossible for
+   it to paint beyond this card's own edges. */
+.comet-ring-clip {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.comet-ring-clip--gold::before {
+  content: "";
+  position: absolute;
+  inset: -2.5px;
+  border-radius: inherit;
+  z-index: 0;
+  filter: blur(1.5px);
+  background: conic-gradient(
+    from 0deg,
+    #fff8e6 0deg,
+    #f4c95d 45deg,
+    #fff8e6 90deg,
+    #f4c95d 135deg,
+    #fff8e6 180deg,
+    #f4c95d 225deg,
+    #fff8e6 270deg,
+    #f4c95d 315deg,
+    #fff8e6 360deg
+  );
+  animation: ring-flow 3s linear infinite;
+}
+
+.comet-ring-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Small comic sticker badge for the #1 card only */
+.starburst {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  z-index: 10;
+  height: 38px;
+  width: 38px;
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+.starburst span {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  border: 2px solid #000;
+  background: #ffe347;
+}
+.starburst span:nth-child(2) {
+  transform: rotate(45deg);
+}
+.starburst b {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-comic);
+  font-size: 10px;
+  color: #000;
+  font-weight: 400;
+}
