@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import instaIcon from "@/app/insta.png";
+import xIcon from "@/app/x.png";
 import { AnimatePresence, motion, useAnimate } from "framer-motion";
-import { ArrowUp, ArrowDown, Instagram, Twitter, Facebook, Youtube, Link as LinkIcon } from "lucide-react";
+import { ArrowUp, ArrowDown, Facebook, Youtube, Link as LinkIcon } from "lucide-react";
 import confetti from "canvas-confetti";
 import { CultUser } from "@/lib/types";
 import { formatINR } from "@/lib/format";
@@ -171,15 +173,15 @@ export default function UserCard({
           {socialCount > 0 && (
             <div className="flex flex-wrap gap-2 border-t border-line/70 px-3.5 py-3 sm:px-4">
               {user.socials.instagram && (
-                <SocialPill href={user.socials.instagram} label="Instagram" color={BRAND_COLORS.instagram}>
-                  <Instagram size={14} />
-                </SocialPill>
-              )}
-              {user.socials.twitter && (
-                <SocialPill href={user.socials.twitter} label="X / Twitter" color={BRAND_COLORS.twitter}>
-                  <Twitter size={14} />
-                </SocialPill>
-              )}
+  <SocialPill href={user.socials.instagram} label="Instagram">
+    <Image src={instaIcon} alt="Instagram" width={14} height={14} unoptimized />
+  </SocialPill>
+)}
+{user.socials.twitter && (
+  <SocialPill href={user.socials.twitter} label="X / Twitter">
+    <Image src={xIcon} alt="X" width={14} height={14} unoptimized />
+  </SocialPill>
+)}
               {user.socials.facebook && (
                 <SocialPill href={user.socials.facebook} label="Facebook" color={BRAND_COLORS.facebook}>
                   <Facebook size={14} />
