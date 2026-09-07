@@ -27,7 +27,7 @@ const comic = Bangers({
 });
 
 export const metadata: Metadata = {
-  title: "cultbid.in — climb the list",
+  title: "cultbid.in",
   description: "The rankings only move when the money does.",
 };
 
