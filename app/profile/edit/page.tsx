@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { ProfileRow } from "@/lib/types";
 import Spinner from "@/components/Spinner";
+import AvatarCropperModal from "@/components/AvatarCropperModal";
 
 const DEFAULT_AVATAR = "/default-avatar.svg";
 
@@ -19,6 +20,7 @@ export default function EditProfilePage() {
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -41,29 +43,49 @@ export default function EditProfilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file || !profile) return;
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  // Open the crop modal instead of uploading immediately — the raw
+  // file is only turned into a blob and uploaded once they confirm
+  // a square crop, in handleCropConfirm below.
+  setCropSrc(URL.createObjectURL(file));
+  e.target.value = ""; // lets picking the same file again re-trigger onChange
+}
 
-    setUploading(true);
-    setError(null);
+async function handleCropConfirm(blob: Blob) {
+  if (!profile) return;
 
-    const path = `${profile.id}/profile.${file.name.split(".").pop()}`;
-    const { error: uploadError } = await supabase.storage
-      .from("avatars")
-      .upload(path, file, { upsert: true });
+  if (cropSrc) URL.revokeObjectURL(cropSrc);
+  setCropSrc(null);
+  setUploading(true);
+  setError(null);
 
-    if (uploadError) {
-      setError(uploadError.message);
-      setUploading(false);
-      return;
-    }
+  // Cropped output is always a JPEG (see lib/cropImage.ts), so the
+  // storage path extension is fixed regardless of what was uploaded.
+  const path = `${profile.id}/profile.jpg`;
+  const { error: uploadError } = await supabase.storage
+    .from("avatars")
+    .upload(path, blob, { upsert: true, contentType: "image/jpeg" });
 
-    await supabase.from("profiles").update({ avatar_path: path }).eq("id", profile.id);
-    setProfile({ ...profile, avatar_path: path });
-    setAvatarUrl(supabase.storage.from("avatars").getPublicUrl(path).data.publicUrl);
+  if (uploadError) {
+    setError(uploadError.message);
     setUploading(false);
+    return;
   }
+
+  await supabase.from("profiles").update({ avatar_path: path }).eq("id", profile.id);
+  setProfile({ ...profile, avatar_path: path });
+  // Cache-bust so the new crop shows immediately instead of the
+  // browser reusing a cached image at the same URL.
+  setAvatarUrl(`${supabase.storage.from("avatars").getPublicUrl(path).data.publicUrl}?t=${Date.now()}`);
+  setUploading(false);
+}
+
+function handleCropCancel() {
+  if (cropSrc) URL.revokeObjectURL(cropSrc);
+  setCropSrc(null);
+}
 
   async function handleAvatarDelete() {
     if (!profile || !profile.avatar_path) return;
@@ -138,6 +160,9 @@ export default function EditProfilePage() {
 
   return (
     <main className="mx-auto max-w-lg px-4 py-10 sm:px-6">
+      {cropSrc && (
+  <AvatarCropperModal imageSrc={cropSrc} onCancel={handleCropCancel} onCropped={handleCropConfirm} />
+)}
       <button
         onClick={() => router.push("/")}
         className="mb-6 flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-white"
