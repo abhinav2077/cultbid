@@ -229,24 +229,24 @@ function handleCropCancel() {
 
         <div className="mt-2 grid grid-cols-2 gap-3">
           <Field
-            label="Custom link 1 — label"
+            label="Your Website/Product's Name"
             value={profile.custom_link1_label ?? ""}
             onChange={(v) => setProfile({ ...profile, custom_link1_label: v })}
           />
           <Field
-            label="Custom link 1 — URL"
+            label="Website/Product URL"
             value={profile.custom_link1_url ?? ""}
             onChange={(v) => setProfile({ ...profile, custom_link1_url: v })}
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Field
-            label="Custom link 2 — label"
+            label="Your Website/Product's Name"
             value={profile.custom_link2_label ?? ""}
             onChange={(v) => setProfile({ ...profile, custom_link2_label: v })}
           />
           <Field
-            label="Custom link 2 — URL"
+            label="Website/Product URL"
             value={profile.custom_link2_url ?? ""}
             onChange={(v) => setProfile({ ...profile, custom_link2_url: v })}
           />
