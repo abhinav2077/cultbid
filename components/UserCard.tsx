@@ -61,7 +61,7 @@ export default function UserCard({
 
     const timer = setTimeout(async () => {
       if (!scope.current) return;
-      await animate(scope.current, { scale: [1, 1.08, 1] }, { duration: 0.4, ease: "easeOut" });
+      await animate(scope.current, { scale: [1, 1.08, 1] }, { duration: 0.5, ease: "easeOut" });
 
       const rect = scope.current.getBoundingClientRect();
       const origin = {
