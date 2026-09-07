@@ -194,12 +194,12 @@ export default function UserCard({
               )}
               {user.socials.custom1 && (
                 <SocialPill href={user.socials.custom1.url} label={user.socials.custom1.label}>
-                  <LinkIcon size={14} />
+                  <LinkIcon size={12} />
                 </SocialPill>
               )}
               {user.socials.custom2 && (
                 <SocialPill href={user.socials.custom2.url} label={user.socials.custom2.label}>
-                  <LinkIcon size={12} />
+                  <LinkIcon size={14} />
                 </SocialPill>
               )}
             </div>
