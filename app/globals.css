@@ -115,10 +115,10 @@ body {
 @keyframes breathe-gold {
   0%,
   100% {
-    box-shadow: 0 0 0 3px #f4c95d, 0 0 20px 4px rgba(244, 201, 93, 0.55);
+    box-shadow: 0 0 0 3px #f4c95d, 0 0 20px 4px rgba(255, 183, 0, 0.55);
   }
   50% {
-    box-shadow: 0 0 0 4px #fff3cf, 0 0 38px 10px rgba(244, 201, 93, 0.95);
+    box-shadow: 0 0 0 4px #fff3cf, 0 0 38px 10px rgb(255, 190, 24);
   }
 }
 
