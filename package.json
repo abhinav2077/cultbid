@@ -19,7 +19,8 @@
     "@supabase/ssr": "^0.4.0",
     "razorpay": "^2.9.4",
     "server-only": "^0.0.1",
-    "canvas-confetti": "^1.9.3"
+    "canvas-confetti": "^1.9.3",
+    "react-easy-crop": "^5.1.0"
   },
   "devDependencies": {
     "typescript": "^5.5.4",
