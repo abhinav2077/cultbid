@@ -178,7 +178,7 @@ export default function UserCard({
   </SocialPill>
 )}
 {user.socials.twitter && (
-  <SocialPill href={user.socials.twitter} label="X">
+  <SocialPill href={user.socials.twitter} label="X / Twitter">
     <Image src={xIcon} alt="X" width={14} height={14} unoptimized />
   </SocialPill>
 )}
