@@ -28,19 +28,28 @@ export default function Leaderboard({
         <p className="text-xs text-muted">{users.length} ranked · live</p>
       </div>
 
-      <LayoutGroup>
-        <motion.ul layout className="flex flex-col gap-5">
-          {users.map((user, i) => (
-            <UserCard
-              key={user.id}
-              user={user}
-              rank={i}
-              prevRank={prevRanks.get(user.id)}
-              celebrate={celebrateId.current === user.id}
-            />
-          ))}
-        </motion.ul>
-      </LayoutGroup>
+            {users.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <p className="comic-text text-3xl sm:text-4xl">
+            <span className="text-neon">Be the First.</span>{" "}
+            <span className="text-comicYellow">Claim #1 Now!</span>
+          </p>
+        </div>
+      ) : (
+        <LayoutGroup>
+          <motion.ul layout className="flex flex-col gap-2">
+            {users.map((user, i) => (
+              <UserCard
+                key={user.id}
+                user={user}
+                rank={i}
+                prevRank={prevRanks.get(user.id)}
+                celebrate={celebrateId.current === user.id}
+              />
+            ))}
+          </motion.ul>
+        </LayoutGroup>
+      )}
     </section>
   );
 }
