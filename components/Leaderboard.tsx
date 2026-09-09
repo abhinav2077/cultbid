@@ -37,7 +37,7 @@ export default function Leaderboard({
         </div>
       ) : (
         <LayoutGroup>
-          <motion.ul layout className="flex flex-col gap-5">
+          <motion.ul layout className="flex flex-col gap-4">
             {users.map((user, i) => (
               <UserCard
                 key={user.id}
